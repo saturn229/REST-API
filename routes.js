@@ -2,15 +2,15 @@
 
 
 const express = require('express');
-const { asyncHandler } = require('../middleware/async-handler');
-const { User, Course } = require('../models');
-const { authenticateUser } = require('../middleware/auth-user');
+const { asyncHandler } = require('./middleware/async-handler');
+const { User, Course } = require('./models');
+const { authenticateUser } = require('./middleware/auth-user');
 const bcrypt = require('bcrypt');
 
 const router = express.Router();
 
 //return a list of users
-router.get('/users', authenticateUser, asyncHandler(async(req, res) => {
+router.get('/users', asyncHandler(async(req, res) => {
     const user = req.currentUser;
 
     res.json({
@@ -24,13 +24,13 @@ router.get('/users', authenticateUser, asyncHandler(async(req, res) => {
 }));
 
 
-router.post('/users', asyncHandler(async(req, red) => {
+router.post('/users', asyncHandler(async(req, res) => {
     try {
         let newUser = {
-            "firstName": req.body.firstName,
-            "lastName": req.body.lastName,
-            "email": req.body.email,
-            "password": req.body.password
+            firstName: req.firstName,
+            lastName: req.lastName,
+            email: req.email,
+            password: req.password
         };
 
         await User.create(newUser).then(createdUser => {
@@ -49,3 +49,5 @@ router.post('/users', asyncHandler(async(req, red) => {
 }));
 
 //return a list of courses
+
+module.exports = router
