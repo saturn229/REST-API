@@ -20,6 +20,17 @@ app.get('/', (req, res) => {
   });
 });
 
+app.get('/api/users', (req, res) => {
+  res.status(200).json(req.user);
+});
+
+app.post('/api/users', (req, res) => {
+  const newUser = req.body;
+  users.push(newUser); // Simulating user creation
+
+  res.status(201).set('Location', '/').end();
+});
+
 // send 404 if no other route matched
 app.use((req, res) => {
   res.status(404).json({
