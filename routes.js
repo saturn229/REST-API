@@ -27,10 +27,10 @@ router.get('/users', asyncHandler(async(req, res) => {
 router.post('/users', asyncHandler(async (req, res) => {
     try {
         let newUser = {
-            firstName: req.firstName,
-            lastName: req.lastName,
-            emailAddress: req.emailAddress,
-            password: req.password
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            emailAddress: req.body.emailAddress,
+            password: req.body.password
         };
 
         const createdUser = await User.create(newUser);

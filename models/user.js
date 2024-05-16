@@ -11,10 +11,54 @@ module.exports = (sequelize, DataTypes) => {
      */
   }
   User.init({
-    firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING,
-    emailAddress: DataTypes.STRING,
-    password: DataTypes.STRING
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'A first name is required'
+        },
+        notEmpty: {
+          msg: 'Please provide a last name'
+        }
+      }
+    },
+    lastName: { 
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'A last name is required'
+        },
+        notEmpty: {
+          msg: 'Please provide a last name'
+        }
+      }
+    },
+    emailAddress: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'A name is required'
+        },
+        notEmpty: {
+          msg: 'Please provide a last name'
+        }
+      }
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: 'A name is required'
+        },
+        notEmpty: {
+          msg: 'Please provide a last name'
+        }
+      }
+    },
   }, {sequelize});
 
   User.associate = (models) => {
