@@ -15,6 +15,10 @@ const app = express();
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
 
+
+// sets up request for JSON parsing
+app.use(express.json());
+
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {
   res.json({
