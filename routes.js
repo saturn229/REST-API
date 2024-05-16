@@ -37,14 +37,16 @@ router.post('/users', asyncHandler(async (req, res) => {
         
         // Set response status and header after creating user
         await User.create(newUser).then(createdUser => {
-            res.status(201)
-            res.header('location', '/');
-        });
+                res.status(201)
+                res.header('location', '/');
+            });
     } catch (error) {
         if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
             const errors = error.errors.map(err => err.message);
+            console.error('Unexpected error:', error);
             res.status(400).json({ errors });   
         } else {
+            console.error('Unexpected error:', error);
             throw error;
         }
     }
