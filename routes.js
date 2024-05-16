@@ -24,29 +24,30 @@ router.get('/users', asyncHandler(async(req, res) => {
 }));
 
 
-router.post('/users', asyncHandler(async(req, res) => {
+router.post('/users', asyncHandler(async (req, res) => {
     try {
         let newUser = {
             firstName: req.firstName,
             lastName: req.lastName,
-            email: req.email,
+            emailAddress: req.emailAddress,
             password: req.password
         };
 
-        await User.create(newUser).then(createdUser => {
-            res.status(201)
-            res.header('location', '/');
-        });
-
-    } catch (error){
+        const createdUser = await User.create(newUser);
+        
+        // Set response status and header after creating user
+        res.status(201).header('Location', '/');
+        res.json(createdUser);
+    } catch (error) {
         if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
             const errors = error.errors.map(err => err.message);
             res.status(400).json({ errors });   
-          } else {
+        } else {
             throw error;
-          }
+        }
     }
 }));
+
 
 //return a list of courses
 

@@ -15,10 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     lastName: DataTypes.STRING,
     emailAddress: DataTypes.STRING,
     password: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'User',
-  });
+  }, {sequelize});
 
   User.associate = (models) => {
     // define association here
