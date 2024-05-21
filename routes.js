@@ -10,7 +10,7 @@ const bcrypt = require('bcrypt');
 const router = express.Router();
 
 //return a list of users
-router.get('/users', asyncHandler(async(req, res) => {
+router.get('/users', authenticateUser, asyncHandler(async(req, res) => {
     const user = req.currentUser;
 
     res.json({
@@ -33,26 +33,29 @@ router.post('/users', asyncHandler(async (req, res) => {
             password: req.body.password
         };
 
-        const createdUser = await User.create(newUser);
-        
         // Set response status and header after creating user
         await User.create(newUser).then(createdUser => {
                 res.status(201)
                 res.header('location', '/');
             });
     } catch (error) {
-        if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
-            const errors = error.errors.map(err => err.message);
-            console.error('Unexpected error:', error);
-            res.status(400).json({ errors });   
-        } else {
-            console.error('Unexpected error:', error);
-            throw error;
-        }
+        const errors = error.errors.map(err => err.message);
+        res.status(400).json({ errors });   
+        
     }
 }));
 
 
-//return a list of courses
+// return a list of all courses
+// return a specific course
+// create new coures
+// update a course
+// delete a course
+
+// create validation 
+
+// hash password
+
+// add user authentication
 
 module.exports = router
