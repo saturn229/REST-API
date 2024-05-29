@@ -35,18 +35,31 @@ router.post('/users',  asyncHandler(async (req, res) => {
                 "emailAddress": req.body.emailAddress,
                 "password": hashedPassword
             };
-        }
+        
 
         // Set response status and header after creating user
         await User.create(newUser).then(createdUser => {
                 res.status(201)
                 res.header('location', '/');
             });
+
+        } else {
+            res.status(400);
+            res.json({"messsage": "No password provided! You must give a first name, last name, and an email address!"});
+        }
     } catch (error) {
-        const errors = error.errors.map(err => err.message);
-        res.status(400).json({ errors });   
         
+        if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError') {
+            console.log(error)
+            const errors = error.errors.map(err => err.message);
+            res.status(400);
+            res.json({ errors });
+        } else {
+            throw error;
+        }
     }
+    res.end();
+
 }));
 
 
@@ -165,7 +178,7 @@ router.post('/courses', authenticateUser, asyncHandler(async(req, res) => {
         };
         await Course.create(newCourse).then (createdCourse => {
             res.status(201);
-            res.header('location', `/course/${createdCourse.id}`);
+            res.header('location', `/courses/${createdCourse.id}`);
         });
 
     } catch(error) {
@@ -192,7 +205,7 @@ router.put('/courses/:id', authenticateUser, asyncHandler(async(req, res) => {
         }).then (updatedCourse => {
             if(updatedCourse !== null && typeof(updatedCourse) !== 'undefined' && updatedCourse.length >0){
                 if(updatedCourse[0] > 0){
-                    res.status(200);
+                    res.status(204);
                     res.header('location', `/course/${req.params.id}`);
                     res.json({"message": 'Course updated succesfully!'})
                 } else {
@@ -227,7 +240,7 @@ router.delete('/courses/:id', authenticateUser, asyncHandler(async(req, res) => 
         await Course.destroy({
             where: {
                 id: req.params.id,
-                serId: req.currentUser.id
+                userId: req.currentUser.id
             }
         }).then(function(rowDeleted){
             if(rowDeleted === 1){
